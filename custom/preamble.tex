@@ -1,0 +1,38 @@
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+%\usepackage[]{todonotes}
+\usepackage[]{authblk}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{tikz-cd}
+\usepackage{lipsum}	
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usepackage{stmaryrd}
+%\usepackage[none]{hyphenat}
+\usetikzlibrary{babel}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage[shortlabels]{enumitem}
+\usetikzlibrary{automata}
+\usetikzlibrary{positioning}  %                 ...positioning nodes
+\usetikzlibrary{arrows}       %                 ...customizing arrows
+\tikzset{node distance=4.5cm, % Minimum distance between two nodes. Change if necessary.
+         every state/.style={ % Sets the properties for each state
+           semithick,
+           fill=gray!10},
+         initial text={},     % No label on start arrow
+         double distance=4pt, % Adjust appearance of accept states
+         every edge/.style={  % Sets the properties for each transition
+         draw,
+           ->,>=stealth',     % Makes edges directed with bold arrowheads
+           auto,
+           semithick}}

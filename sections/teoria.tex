@@ -1,0 +1,215 @@
+\section{Marco Teórico} % (fold)
+\label{sec:Marco Teórico}
+
+\subsection{Matrices}
+\begin{definition}
+La matriz es un arreglo bidimensional formado por números o símbolos los cuales se encuentran distribuidos en una forma rectangular a través de lineas verticales u horizontales las cuales son llamadas columnas o filas respectivamente.
+\end{definition}
+
+Las matrices resultan útiles por la capacidad de crear representaciones de sistemas de ecuaciones lineales o diferenciales. Por ejemplo podemos representar el siguiente sistema de ecuaciones:
+
+\[
+    \begin{cases}
+        ax_1 + bx_2 = y_1\\
+        cx_1 + dx_2 = y_2
+    \end{cases}
+\]
+
+Como el siguiente sistema de matrices:
+
+\[
+\left[\begin{array}{cc}
+    a & b \\
+    c & y
+\end{array}\right]
+\left[\begin{array}{c}
+    x_1\\
+    x_2 
+\end{array}\right] =
+\left[\begin{array}{c}
+    y_1\\
+    y_2 
+\end{array}\right]
+\]
+
+Adicionalmente podemos denotar este sistema matricial como:
+
+\[
+    A\cdot X = Y
+\]
+
+\subsubsection{Matriz diagonal}
+\begin{definition}
+Llamamos matriz diagonal a una matriz cuadrada que solo posee elementos diferentes a $0$ en la diagonal principal. 
+\end{definition}
+
+Por ejemplo tenemos la siguiente matriz diagonal $D$ de orden $n\times n$:
+
+\[D =
+  \begin{mtx}{4}
+    d_1 & 0 & \dots & 0 \\
+    0 & d_2 & \dots & 0 \\
+    \vdots & \vdots & \ddots & 0 \\
+    0 & 0 & \dots & d_n\\
+  \end{mtx}
+\]
+
+\subsubsection{Matriz invertible}
+\begin{definition}
+Una matriz cuadrada $A$ de orden finito $n\times n$ es invertible si existe una matriz de orden $n \times n$, que denotamos como $A^{-1}$, tal que el producto $A \cdot A^{-1} = A^{-1}\cdot A= I_n$. Siendo $I_n$ la matriz identidad de orden $n$. Llamaremos a $A^{-1}$ como la matriz inversa de $A$    
+\end{definition}
+
+\subsubsection{Matriz semejante}
+\begin{definition}
+Dos matrices cuadradas $A$ y $B$ de orden $n \times n$ son semejantes si existe una matriz invertible $P$ de dimensión $n \times n$ de manera que se cumpla la siguiente relación:
+\[
+    P^{-1}AP = B 
+\]    
+\end{definition}
+
+
+\subsection{Autovalores y Autovectores}
+\begin{definition}
+Sea $A$ una matriz cuadrada de orden $n \times n$:
+
+\begin{enumerate}
+    \item Un autovector de $A$ es un vector diferente de 0 en $\mathbb{R}^n$ tal que $Av = \lambda v$ para algún escalar $\lambda$.
+    \item Un autovalor de $A$ es un escalar $\lambda$ tal que la ecuación $Av = \lambda v$ tiene una solución no trivial
+\end{enumerate}    
+\end{definition}
+
+\begin{prop} \label{autoli}
+  Los autovectores asociados a autovalores diferentes son linealmente independientes.
+\end{prop}
+
+\begin{prop} \label{autotr}
+	Una matriz cuadrada $A$ comparte autovalores con su transpuesta $A^{t}$.
+\end{prop}
+
+\begin{prop}\label{mtxeig}
+   Dado $V$ un $K-$espacio vectorial y un endomorfismo $T: V \to V $ diremos que $\lambda \in K$ es un valor propio de $T$ si y sólo si existe un vector no nulo $v \in V$ tal que: 
+   \[
+    T(v) = \lambda I_nv
+   \]
+\end{prop}
+
+  Lo que se puede representar tambien de la manera:
+   \begin{gather*}
+       T(v) = \lambda I_nv\\
+       T(v) - \lambda I_nv= \cancel{\lambda I_nv - \lambda I_nv}_0\\
+       T(v) - \lambda I_nv = 0 \\
+   \end{gather*}
+   
+   De esta forma se obtiene la relación:
+   \[
+     (T - \lambda I_n)v = 0 \\
+   \]
+
+
+\subsubsection{Autoespacio}
+\begin{definition}
+  Sea $A$ una matriz cuadrada de orden $n \times n$, sea $\lambda$ un autovalor de $A$. El $\lambda$-autoespacio de $A$ es el conjunto solucion del sistema $(A-\lambda I_n)v = 0$. O lo que es lo mismo el subespacio $\opnm{Nuc}(A-\lambda I_n)$
+\end{definition}
+
+\subsubsection{Matrices Diagonalizables}
+\begin{definition}
+    Sea $A$ un matriz de orden $n \times n$, $A$ sera diagonalizable si es semejante a una matriz diagonal $D$, lo que implica que existe una matriz cuadrada invertible $P$ tal que se cumple la siguiente relación:
+    \[
+        P^{-1}AP = D
+    \]
+\end{definition}
+
+\begin{prop}
+  Sea $A$ una matriz diagonalizable de orden $n \times n$ con matriz daigonal asociadada $D$ y matriz de paso $P$, además sean $\lambda_{1},\lambda_{2},\dots,\lambda_{n}$ autovalores de $A$ y $v_{1},v_{2},\dots,v_{n}$ autovectores de $A$, entonces se cumplirá:
+	\begin{itemize}
+		\item $D = \opnm{Diag}(\lambda_{1},\lambda_{2},\dots,\lambda_{n})$
+		\item $P = \begin{mtx}{4}
+				\vdots & \vdots & \vdots & \vdots\\
+				v_{1} & v_{2} & \dots &v_{n}\\
+				\vdots & \vdots & \vdots & \vdots\\
+		\end{mtx}$
+	\end{itemize}
+\end{prop}
+
+\begin{prop}\label{diagpot}
+	Sea $A$ una matriz diagonalizable de orden $n \times n$ con matriz diagonal asociada $D$ y matriz de paso $P$, entonces se cumplirá:
+	\[
+	  A^{n} = PD^{n}P^{-1}
+	\]
+\end{prop}
+
+
+\subsection{Procesos de Markov}
+
+\begin{definition}
+    Un proceso aleatorio $\{X(t)|t\in T\}$ es llamado un proceso de Markov si para cualquier momento $t_0<t_1<\dots<t_n<t$ la distribución condicional en $X(t)$ dados los valores de $X(t_0),\dots,X(t_n)$ este depende únicamente de $X(t)$. Formalmente:
+    \[
+        P[X(t)\leq x| X(t_n) = x_n,\dots,X(t_0) = x_0] = P[X(t)=x| X(t_n) = x_n]
+    \]
+\end{definition}
+
+\subsubsection{Matriz estocástica}
+
+\begin{definition}
+    Se llama matriz estocástica a una matriz cuadrada cuyos elementos son todos positivos y la suma de los elementos de cada columna es igual a 1.
+    \[
+        \mathcal{P} = \left[
+        \begin{array}{cccc}
+            p_{11} & p_{12} & \dots & p_{1n}\\
+            p_{21} & p_{22} & \dots & p_{2n}\\
+            \vdots & \vdots & \ddots & \vdots\\
+            p_{n1} & p_{n2} & \dots & p_{nn}
+        \end{array}
+        \right] \; p_{ij} \geq 0 \land \sum_{j=1}^{n}p_{ij} = 1 \quad \forall i = 1,2,\dots,n
+    \] 
+\end{definition}
+
+\begin{theorem} \label{esto1}
+	Sea $A$ una matriz estocástica de orden $n \times n$, entonces $\lambda = 1$ es un autovalor de $A$.
+\end{theorem}
+
+\begin{proof}
+	Sea $a = (1,1,\dots,1)^{t}$ un vector columna $n$-dimensional con todos sus componentes iguales a 1. Además sabemos por la proposición \ref{autotr}  que $A$ compartira autovalores con su transpuesta.
+
+	entonces efectuaremos el producto $A^{t}a$:
+	\[
+		\begin{mtx}{4}
+			p_{11} & p_{21} & \dots & p_{n1}\\
+			p_{12} & p_{22} & \dots & p_{n2}\\
+			\vdots & \vdots & \ddots & \vdots\\
+			p_{1n} & p_{2n} & \dots & p_{nn}
+		\end{mtx}
+		\begin{mtx}{1}
+		  1\\
+			1\\
+			\vdots\\
+			1\\
+		\end{mtx} =
+		\begin{mtx}{1}
+		  \sum_{i = 1}^{n}p_{i1}\\
+		  \sum_{i = 1}^{n}p_{i2}\\
+			\vdots\\
+		  \sum_{i = 1}^{n}p_{in}\\
+		\end{mtx}
+		=1
+		\begin{mtx}{1}
+		  1\\
+			1\\
+			\vdots\\
+			1\\
+		\end{mtx}
+	\]
+	Finalmente observamos que 1 es un autovalor de $A^{t}$ y por propiedad de $A$, además tiene como autovector asociado a $a$.
+\end{proof}
+
+
+\begin{theorem}[Teorema de Perron-Frobenious.] \label{perron}
+	Sea A una matriz de orden $n$ no nula y suponiendo que $a_{ij} > 0$, entonces $A$ tiene un autovalor real o positivo mayor que el módulo de todos los demás y tal que tiene un autovector asociado con todas sus componentes positivas.
+\end{theorem}
+
+\subsection{Modelos científicos}
+
+La realidad posee diferentes sistemas complejos los cuales si analizamos de una manera general se presenta una dificultad para poder observar las leyes que gobiernan su funcionamiento. Los modelos científicos son una de las herramientas para poder representar estos fenómenos de una manera mas sistemática.
+El modelamiento científico se realiza a través de abstraer los diferentes procesos que afectan a un sistema con el fin de analizar los rasgos mas significativos de este.
+
+% section Marco Teórico (end)

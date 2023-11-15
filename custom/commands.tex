@@ -1,0 +1,28 @@
+\newenvironment{amatrix}[1]{%
+	\left(\begin{array}{@{}*{#1}{c}|c@{}}
+	}{%
+	\end{array}\right)
+}
+
+\newenvironment{mtx}[1]{%
+  \left[\begin{array}{@{}*{#1}{c}@{}}
+	}{%
+\end{array}\right]
+}
+
+\newcommand{\lmapdef}[3]{
+  #1: #2 \rightarrow #3
+}
+
+\newcommand{\opnm}[1]{
+  \operatorname{#1}
+}
+
+\newcommand{\bs}[1]{
+  \mathcal{#1}
+}
+
+
+\newtheorem{definition}{Definición}
+\newtheorem{theorem}{Teorema}[definition]
+\newtheorem{prop}{Proposición}[definition]

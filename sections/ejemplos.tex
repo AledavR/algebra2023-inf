@@ -1,0 +1,295 @@
+\section{Ejemplos de aplicación}
+
+\subsection{Caso contagio de enfermedad}
+Se busca analizar el desarrollo de una cepa de una enfermedad contagiosa en una población de 1000 individuos. Se conoce que luego de una semana un individuo sano posee un 70\% de probabilidades de contraer la enfermedad, además se conoce que luego de una semana un individuo enfermo tiene un 40\% de probabilidades de curarse sin obtener inmunidad a la enfermedad, un 10\% de probabilidad de fallecer a causa de la enfermedad y un 40\% de probabilidad de desarrollar inmunidad permanente a la enfermedad. Se busca conocer la distribución de la población luego de cinco semanas de haber comenzado el contagio.
+
+Comenzaremos el análisis observando los posibles estados en los que se puede encontrar un individuo:
+
+\begin{itemize}
+    \item Sano
+    \item Enfermo
+    \item Inmunizado
+    \item Muerto
+\end{itemize}
+
+Además se tiene que el vector de población inicial sera igual a:
+
+\[
+    \vec{p} = 
+    \left[
+    \begin{array}{c}
+        1000\\
+        0\\
+        0\\
+        0
+    \end{array}
+    \right]
+\]
+
+Conocemos las probabilidades que definen los cambios de estado de un ejemplar sano y enfermo. Los estados restantes no presentaran una variación en el tiempo. 
+
+
+
+Por lo tanto el modelo del desarrollo de la enfermedad sera de la siguiente manera:
+
+\begin{figure}[htb]
+\centering
+\begin{tikzpicture}
+\node[state] (s1) {Sano};
+\node[state, right of=s1] (s2) {Enfermo};
+\node[state, below left of=s2] (s3) {Inmune};
+\node[state, below right of=s2] (s4) {Muerto};
+
+\draw (s1) edge[loop left] node {0.3}  (s1);
+\draw (s1) edge[bend left] node {0.7}  (s2);
+
+
+\draw (s2) edge[bend left=12] node {0.4} (s1);
+\draw (s2) edge[loop right] node {0.1} (s2);
+\draw (s2) edge[bend right=12] node{0.4} (s3);
+\draw (s2) edge[bend left=12] node{0.1} (s4);
+
+\draw (s3) edge[loop left] node {1} (s3);
+\draw (s4) edge[loop right] node{1} (s4);
+
+\end{tikzpicture}
+\caption{Cadena de Markov}
+
+\end{figure}
+
+De donde podemos obtener la siguiente matriz de transición:
+
+\[
+    A = 
+    \left[
+        \begin{array}{cccc}
+            0.3 & 0.4 & 0 & 0 \\
+            0.7 & 0.1 & 0 & 0 \\
+            0 & 0.4 & 1 & 0 \\
+            0 & 0.1 & 0 & 1
+        \end{array}
+    \right]
+\]
+Podemos observar que la matriz solo posee valores reales positivos y además los elementos de cada columna suman 1 entonces se puede decir que la matriz de transición es una matriz estocástica. Entonces por el teorema \ref{esto1} podemos garantizar que $\lambda = 1$ será un autovalor de la matriz.
+
+Con ayuda de una herramienta computacional se obtienen los autovalores y autovectores asociados a la matriz de transición:
+
+\begin{gather*}
+    \lambda_1,\lambda_2 = 1 \quad E_{\lambda_1,\lambda_2} = L\{(0,0,1,0)^t,(0,0,0,1)^t\}\\
+    \lambda_3 = 0.738516 \quad E_{\lambda_3} = L\{(-2.38516,-2.6148,4,1)^t\}\\
+    \lambda_4 = -0.338516 \quad E_{\lambda_4} = L\{(8.38516,-13.3852,4,1)^t\}\\
+\end{gather*}
+
+Por la proposición \ref{autoli} se sabe que los autovectores asociados a autovalores diferentes serán linealmente independientes por lo tanto el conjunto $B = \{v_1,v_2,v_3,v_4\}$ sera una base de espacio vectorial $\mathbb{R}^4$ donde $v_i$ sera el autovector asociado al autovalor $\lambda_i, i = 1,2,3,4$
+
+Como la multiplicidad algebraica de cada autovalor coincide con la multiplicidad geométrica. Entonces la matriz $A$ sera diagonalizable de la siguiente forma:
+
+\[
+    A = PDP^{-1}
+\]
+
+Luego si se quiere conocer la distribución de la población luego de 5 semanas se hará uso del teorema \ref{diagpot} de las matrices diagonalizables:
+
+\[
+    A^5\vec{p} = PD^5P^{-1}\vec{p}
+\]
+
+Como el vector de población inicial pertenece a $R^4$ este podrá ser escrito de la siguiente forma:
+
+\[
+    \vec{p} = w_1v_1 + w_2v_2 + w_3v_3 + w_4v_4
+\]
+ y la matriz $P^{-1}$ describirá una matriz de cambio de base de la base canónica a la base $B$. Entonces podemos desarrollar la expresión $A^5\vec{p} = PD^5P^{-1}\vec{p}$ de  la siguiente manera
+
+ \begin{gather*}
+    A^5\vec{p} = P D^5 \left[\begin{array}{c} w_1\\ w_2\\ w_3\\ w_4 \end{array}\right]\\
+    A^5\vec{p} = P \left[\begin{array}{c} \lambda_1^5w_1\\ \lambda_2^5w_2\\ \lambda_3^5w_3\\ \lambda_4^5w_4 \end{array}\right]\\
+    A^5\vec{p} = \lambda_1^5w_1v_1 + \lambda_2^5w_2v_2 + \lambda_3^5w_3v_3 + \lambda_4^5w_4v_4\\
+ \end{gather*}
+
+ Hallando los valores $w_i$:
+
+ \[
+    \vec{p} = 800v_1 + 200v_2 - 248.558 v_3 + 48.556 v_4
+ \]
+
+ Finalmente la expresión $A^5\vec{p}$ queda de la siguiente forma:
+
+ \[
+        A^5\vec{p} = 1^5(800)v_1 + 1^5(200)v_2 + 0.738516^5(-248.558)v_3 -0.338516^5(48.556)v_4
+ \]
+
+ Opererando:
+
+ \[
+    A^5\vec{p} = (0,0,800,0) + (0,0,0,200) + (130,142,-218,-54) + (-2,3-1,0)\\
+\]
+
+
+Obtenemos que luego de 5 semanas la población presentara la siguiente distribución:
+\[
+    A^5\vec{p} = (128,145,581,146)
+\]
+ teniendo a 128 individuos sanos, 145 enfermos,581 que han desarrollado inmunidad y 146 que han perecido a causa de la enfermedad. Sumando los valores obtenemos 1000 que coincide con el numero de individuos en la población.
+
+ Adicionalmente podemos hacer el estudio en un tiempo $n$ que tiende al infinito tal que:
+\[
+    \lim_{n \to \infty}A^n\vec{p} = \lim_{n \to \infty} \underbrace{1^n}_{=1}(800)v_1 + \underbrace{1^n}_{=1}(200)v_2 + \underbrace{0.738516^n}_{\approx 0}(-248.558)v_3 \underbrace{-0.338516^n}_{\approx 0}(48.556)v_4
+\]
+De donde obtenemos que:
+\[
+    A^n\vec{p} = (0,0,800,200)
+\]
+que quiere decir que cuando la enfermedad ya no se pueda seguir propagando habrán perecido 200 individuos a causa de esta y habrán aproximadamente 800 individuos con inmunidad.
+ 
+\subsection{Caso crecimiento poblacional de ratones}
+Se estudia a una especie de ratones donde se consideran 3 etapas vitales: crías, jóvenes y adultos. Esta especie de ratón progresa de cría a joven en un determinado periodo de tiempo, de joven a adulto en un periodo de tiempo similar y, finalmente, los jóvenes y adultos tienen crías en un periodo de tiempo similar a los anteriores. Se desea saber la distribución de la población luego de 10 periodos de tiempo, con una distribución inicial de 10 adultos, 15 jóvenes y 40 crías. Se conoce que solo el 20\% de las crías llegan a ser jovenes y solo un 50\% de los ratones jóvenes llegan a adultos, cada ratón joven tiene una media de 5 crías y que cada adulto tiene una media  3 de crías. 
+
+Lo primero que debemos hacer es definir los posibles etapas de un individuo de la especie, en este caso se nos otorga de manera directa los cuales son:
+
+\begin{itemize}
+    \item Cría (C)
+    \item Joven (J)
+    \item Adulto (A)
+\end{itemize}
+
+además se tiene un vector de población inicial $\vec{p} = \left[ \begin{array}{c}
+    40 \\
+    15 \\
+    10
+\end{array} \right] $
+
+Denotamos las siguientes expresiones:
+
+\begin{align*}
+    C_t &= \text{numero de crías en el instante de tiempo t}\\
+    J_t &= \text{numero de jóvenes en el instante de tiempo t}\\
+    A_t &= \text{numero de adultos en el instante de tiempo t}
+\end{align*}
+
+Luego definimos relaciones entre las diferentes etapas:
+\[
+\begin{cases}
+    C_t = 5 J_{t-1} + 3 A_{t-1} \text{(Cada adulto tiene 3 crías y cada joven 5 crías)}\\
+    J_t = 0.2 C_{t-1} \text{(20\% de las crías llegan a la juventud)}\\
+    A_t = 0.5 L_{t-1} \text{(50\% de los jóvenes llegan a ser adultos)}\\
+\end{cases}
+\]
+
+Por lo tanto podemos representar gráficamente al modelo de la siguiente forma:
+\begin{figure}[htb]
+
+\centering
+\begin{tikzpicture}
+\node[state] (s1) {C};
+\node[state, right of=s1] (s2) {J};
+\node[state, right of=s2] (s3) {A};
+
+\draw (s1) edge[bend left] node {0.2}  (s2);
+\draw (s2) edge[bend left] node {0.5}  (s3);
+
+
+\draw (s2) edge[bend left=12] node {5} (s1);
+\draw (s3) edge[bend left] node {3} (s1);
+
+\end{tikzpicture}
+
+\caption{Modelo de Leslie}
+\end{figure}
+
+Además se obtiene la matriz de transición ($A$):
+
+\[
+A =
+\left[
+    \begin{array}{ccc}
+        0 & 5 & 3 \\
+        0.2 & 0 & 0 \\
+        0 & 0.5 & 0
+    \end{array}
+\right]
+\]
+
+Se sabe que la distribución de la población en el instante de tiempo $t$ es dependiente del instante de tiempo anterior $t-1$:
+
+\[
+    \left[
+    \begin{array}{c}
+        C_t \\
+        J_t \\
+        A_t
+    \end{array}
+    \right] = 
+    \left[
+    \begin{array}{ccc}
+        0 & 5 & 3 \\
+        0.2 & 0 & 0 \\
+        0 & 0.5 & 0
+    \end{array}
+    \right]
+    \left[
+    \begin{array}{c}
+        C_{t-1} \\
+        J_{t-1} \\
+        A_{t-1}
+    \end{array}
+    \right]
+\]
+
+Hallamos los autovalores y autovectores de la matriz $A$:
+
+\begin{gather*}
+    \lambda_1 = -0.3389; \quad v_1 = (1.149,-0.678,1)\\
+    \lambda_2 = -0.7865; \quad v_2 = (6.186,-1.573,1)\\
+    \lambda_3 = 1.1254; \quad v_3 = (12.666,2.251,1)\\
+\end{gather*}
+
+Como $v_1, v_2 \text{ y } v_3$ están asociados a tres autovalores distintos entonces son linealmente independientes y conforman una base $B$ del espacio $\mathbb{R}^3$.
+
+Hallando los coeficientes de la combinación lineal de $\vec{p}$ en la base $B$:
+\[
+    \vec{p} = 11.281v_1 - 6.677v_2 + 5.396v_3
+\]
+
+Realizando el procedimiento visto en el anterior ejercicio obtenemos la siguiente expresión con la cual determinamos $A^t\vec{p}$:
+
+\[
+    A^t\vec{p} = (-0.3389)^t (11.281)v_1 + (-0.7865)^t(-6.677) v_2 + (1.1254)^t(5.396)v_3
+\]
+
+Como deseamos obtener la distribución luego de 10 periodos, reemplazamos $t$ con 10:
+
+
+\begin{gather*}
+   A^{10}\vec{p} = \underbrace{(-0.3389)^{10}}_{\approx 0} (11.281)v_1 + \underbrace{(-0.7865)^{10}}_{\approx 0}(-6.677) v_2 + (1.1254)^{10}(5.396) v_3\\
+   A^{10}\vec{p} = (17.5849)v_3\\
+\end{gather*}
+
+
+Operando tenemos:
+
+\[
+\vec(p)_{10}  = 
+\left[\begin{array}{c}
+    223 \\
+    36 \\
+    18
+\end{array}\right]
+\]
+
+Siendo $\vec{p}_{10}$ la representación vectorial de la distribución en el decimo periodo. Ademas podemos obtener la tasa de crecimiento de un periodo a traves de la expresión  \mbox{$|1 - \lambda_{d}|\times 100\%$} siendo esta cercana a $12.5\%$
+
+Finalmente para un tiempo $t$ que tiende la infinito:
+
+\[
+	\lim_{t \to \infty} A^tE = \lim_{t \to \infty}\underbrace{\lambda_1^t}_{\approx 0} w_1v_1 + \underbrace{\lambda_2^t}_{\approx 0} w_2v_2+  \lambda^t w_3v_3
+\]
+
+En el caso $t \to \infty$ la distribución esta definida solo por
+
+\[
+    A^tE = \lambda^t_3 w_3v_3
+\]
+
+    
+%\subsection{Caso Ecosistema}

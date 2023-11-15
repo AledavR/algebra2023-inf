@@ -1,0 +1,186 @@
+\section{Modelos biológicos discretos} % (fold)
+\label{sec:Modelos biologicos discretos}
+
+Los modelos biológicos discretos reciben su nombre debido a que solo se considera el estado de un sistema en un conjunto discreto de instantes de tiempo, lo que quiere decir que solo estudian el sistema en momentos con una separación similar entre cada periodo.
+Estos modelos suelen definidos por ser representados a 
+de un sistema de ecuaciones recursivas, en el cual una ecuación o formula se aplica de manera recurrente sobre el sistema y de esta manera se obtiene el estado del sistema en un periodo de tiempo determinado el cual se encuentra determinado por los periodos anteriores de tiempo. Estos modelos han presentado una gran variedad de aplicaciones en diversos campos, uno de ellos siendo el estudio de poblaciones.
+
+\subsection{Modelos multidimensionales lineales}
+
+En un modelo multidimensional la población se encuentra divida en diferentes agrupaciones, las cuales pueden estar definidas a razón de alguna característica en concreto del individuo, como podría ser el caso de la edad, las características vitales,la capacidad reproductiva u otros. Para lo cual se usara una variable diferente para denotar a cada grupo de la población la cual representa la cantidad de individuos que pertenecen a dicho grupo en un periodo de tiempo determinado.
+
+El desarrollo que presentara cada grupo del sistema estará definido por la ecuación recursiva con la cual es posible obtener el numero de individuos en un instante de tiempo $t$ a partir de la cantidad de individuos en cada uno de los grupo en el instante anterior $t-1$. Por lo tanto obtendremos una ecuación recursiva para cada grupo obteniendo así un sistema de ecuaciones recursivas que definen la evolución del sistema en su totalidad. 
+
+% subsubsection Modelos biologicos discretos (end)
+
+\subsection{Cadenas de Markov} % (fold)
+\label{sub:Cadenas de Markov}
+Una cadena de Markov es una serie de eventos en donde la probabilidad de que un evento suceda está determinado únicamente por el evento inmediato anterior. Las cadenas de Markov son un tipo de proceso estocástico estacionario lo que quiere decir que a diferencia de un proceso estocástico convencional, que suele ser entendido como impredecible, en este podemos encontrar una serie de características que lo hacen hasta cierto punto predecible. 
+
+Para ilustrar este apartado su relacion con los modelos multidimensionales lineales imaginemos una población con diferentes estados en el cual el número de individuos depende de la cantidad de individuos que hubieron en cada estado en un periodo de tiempo anterior. Por ejemplo tomemos los estados $E_1, E_2,...,E_n$. La cantidad de individuos en un determinado estado en el periodo $t+1$ estará determinado únicamente por los individuos existentes en cada estado en el periodo $t$, siendo que existe una posibilidad de cambiar desde el estado $E_j$ al estado $E_i$ la cual estará denotada por $p_{ij}$, por lo que tendremos que $p_{1j} + p_{2j} + \dots + p_{nj} = 1$ para $i = 1,2,...n$. Por lo que tendremos que el numero de individuos en el periodo $t+1$ ($\{X_i(t+1)\}^n_{i=1}$), se puede representar en función del numero de individuos en el tiempo $t$ (${X_i(t)}^n_{i=1}$), mediante el siguiente sistema de ecuaciones:
+
+\[
+	\begin{cases}
+	 X_{1}(t+1) = p_{11}X_{1} + p_{12}X_{2} + \dots + p_{1n}X_{n}\\
+	 X_{2}(t+1) = p_{21}X_{1} + p_{22}X_{2} + \dots + p_{2n}X_{n}\\
+	 \vdots\\
+	 X_{n}(t+1) = p_{n1}X_{1} + p_{n2}X_{2} + \dots + p_{nn}X_{n}\\
+	\end{cases}
+\]
+
+%\pagebreak
+
+Este sistema se puede representar en forma matricial como:
+
+\[
+  \vec{X}(t+1) = A\vec{X}(t)
+\]
+
+donde $\vec{X}(t) = 
+\left[\begin{array}{c} X_{1}(t)\\ X_{2}(t)\\ \vdots\\ X_{n}(t)\\ \end{array}\right]$ ,
+$\vec{X}(t+1) = \left[\begin{array}{c} X_{1}(t+1)\\ X_{2}(t+1)\\ \vdots\\ X_{n}(t+1)\\ \end{array}\right]$ y 
+$A = \left[\begin{array}{cccc}
+		p_{11}& p_{12}& \dots & p_{1n}\\
+		p_{21}& p_{22}& \dots & p_{2n}\\
+		\vdots & & \ddots & \vdots\\
+		p_{n1}& p_{n2}& \dots & p_{nn}\\
+\end{array}\right]$,
+
+además los elementos de cada columna de la matriz $A$ suman 1 y todos los elementos serán positivos, por lo tanto observamos que la matriz $A$ es una matriz estocástica.
+
+De este modo si se desea conocer la distribución de la población transcurridas $m$ unidades de tiempo desde el tiempo $t$, tendremos $\vec{X}(t+m) = A\vec{X}(t+m-1) = A^{2}\vec{X}(t+m-2) = \dots = A^{m}\vec{X}(t)$. A este tipo de sistemas se le conoce como cadenas de Markov, siendo aqui donde podemos notar que la matriz $A$ representa el conjunto de funciones recursivas que se menciono en la sección anterior, por lo cual una cadena de Markov es una forma de representar un modelo multidimensional lineal.
+
+Luego para resolver sistemas como este se simplificará la matriz  $A$ haciendo uso de la matriz diagonal asociada $D$ y la matriz de paso $P$ la cual esta formada por los autovectores de la matriz $A$. Para luego realizar un análisis del sistema usando la propiedad de las matrices diagonalizables: $A^{m} = PD^{m}P^{-1}$.
+
+% subsection Cadenas de Markov (end)
+
+\subsection{Modelos de Leslie} % (fold)
+\label{sec:Modelos de Leslie}
+
+Este modelamiento se usa principalmente para el estudio de la distribución de la población en distintas etapas del ciclo vital. Esta división suele hacerse por edades pero también es aplicable a diferentes estadios o tamaños del espécimen. 
+
+Para lo cual la distribución de una población estará determinada por el vector:
+\[
+	\vec{N}(t) = \left[\begin{array}{c} N_{0}(t)\\ N_{1}(t)\\ \vdots\\ N_{k-1}(t)\\ \end{array}\right]
+\]
+que simplifica la cantidad de individuos en las $k$ etapas de desarrollo $N_0,N_1,\dots,N_{k-1}$.
+
+Luego buscamos obtener un sistema de ecuaciones recursivas que representen la evolución del sistema en el tiempo, lo que quiere decir que se busca obtener el vector de distribución $\vec{N}(t+1)$ a partir de los datos conocidos de $N(t)$, para lo cual es necesario conocer los diferentes factores que contribuyen a la evolución de una población.
+
+Para ejemplificar este apartado supondremos que se está estudiando una población agrupada por edades de modo que el grupo de edad $i$ engloba a los individuos cuyas edades se encuentran en el intervalo $\left[i,i+1\right[$. Además, se tendrán en cuenta las siguientes características del sistema:
+
+\begin{itemize}
+    \item La población se encuentra aislada, por lo tanto no se presentaran movimientos migratorios que afecten a los distintos grupos de edad.
+    \item El sistema cuenta con los recursos suficientes para soportar el crecimiento que se presenta en la población.
+    \item Si la población presenta una reproducción sexual, el modelo se construirá solo tomando en cuenta a la población de hembras de la especie puesto que a partir de esta despoblación se podrá estimar la población total.
+\end{itemize}
+
+Luego para realizar el planteamiento del modelo se debe de conocer:
+
+\begin{itemize}
+    \item La tasa de supervivencia de cada uno de los $k$ grupos de edad, a la cual denotaremos $s_i$ con $i=1,\dots,k-1$. La tasa de supervivencia del grupo $i$ puedes ser descrita como la proporción de los individuos del grupo $i$ que han sobrevivido luego de un periodo de tiempo $t$ y que por lo tanto pertenecerán ahora al grupo $i+1$. Puesto que tenemos como grupo final al grupo de edad $k-1$ podemos deducir que $s_{k-1} = 0$. Además, se cumplirá que $0 \leq s_i \leq 1$ para todo $i$ puesto que estas tasas representan a las proporciones de supervivencia.
+
+    \item La tasa de fertilidad que denotamos como $f_i$ con $i = 1,\dots,k-1$. La tasa de fertilidad $f_i$ representa el número de descendientes que tiene un individuo del grupo $i$ en cada periodo temporal. En este caso podemos asegurar que $f_i \geq 0$ para todo $i$, puesto que representa el número de individuos nacido de un determinado grupo de edad por cada individuo en dicho grupo.
+\end{itemize}
+
+Luego de delimitadas las condiciones y haber definido los factores que se tomaran en cuenta, es posible plantear el sistema de ecuaciones que permite describir a la población en el instante de tiempo $t+1$, conociendo previamente la distribución de la población en el instante $t$:
+
+\[
+  \begin{cases}
+    N_{0}(t+1) = f_{0}N_{0}(t) +  f_{1}N_{1}(t) + \dots + f_{k-1}N_{k-1}(t)\\
+    N_{1}(t+1) = s_{0}N_{0}(t)\\
+		\vdots\\
+		N_{k-1}(t+1) = s_{k-2}N_{k-2}(t)\\
+	\end{cases}
+\]
+%\pagebreak
+
+El cual se puede representar de la forma matricial:
+
+\[
+  \vec{N}(t+1) = L \vec{N}(t) \text{ con } L = 
+\left[\begin{array}{cccc}
+		f_{0}& f_{1}& \dots & f_{k-1}\\
+		s_{0}& 0 & \dots & 0\\
+		\vdots & \ddots & \ddots & \vdots\\
+		0 & \dots & s_{k-2} & 0\\
+\end{array}\right]
+\]
+
+A la matriz $L$ se le conoce como matriz de Leslie, en honor al fisiólogo Patrick Holt Leslie, que fue el primero en plantear este tipo de problemas en 1945, y el modelo presentado se le conoce como modelo de Leslie.
+
+
+De este modo si queremos conocer la distribución de la población luego de $n$ periodos de tiempo desde un instante inicial $t$ tendremos la siguiente serie $\vec{N}(t+n) = L\vec{N}(t+n-1) = \dots = L^{n}\vec{N}(t) $. Para la resolución de este tipo de problemas se hace uso de la simplificación de la matriz $L$ hallando sus autovalores y autovectores, con los cuales se encontrará la matriz diagonal $D$ asociada a L y su correspondiente matriz de paso $P$.
+
+Asi se tiene que:
+
+\[
+  \vec{N}(t+n) = L^{n}\vec{N}(t) = PD^{n}P^{-1}(t)
+\]
+Luego por el teorema de Perron-Frobenious es posible demostrar que una matriz de Leslie como lo es  $L$ poseerá un autovalor real positivo simple $\lambda_d$, el cual sera mayor que todos los demás autovalores, por lo cual se le denomina como autovalor dominante. Además, el autovector $\vec{u}_d$ asociado a dicho autovalor tiene todas sus componentes positivas.
+
+Por lo tanto, al estudiar el comportamiento a largo plazo de una población de Leslie se observara que la proporción de los individuos entre los distintos grupos de edad $N_0,N_1,\dots,N_k$ a largo plazo vendrá dada por la proporción entre las componentes del autovector $\vec{u}_d$ asociado al autovalor dominante.
+
+Luego estudiando al autovalor dominante ($\lambda_d$) se cumplirán las siguientes propiedades:
+
+\begin{itemize}
+	\item Si $\lambda_{d}> 1$ la población crecerá a lo largo del tiempo.
+	\item Si $\lambda_{d} = 1$ la población sera estable.
+	\item Si $\lambda_{d}< 1$ la población decrecerá a lo largo del tiempo y terminará extinguiéndose.
+    \item El porcentaje de crecimiento o decrecimiento de la población  luego de cada  periodo de tiempo vendrá determinada por $(1-\lambda_d) \times 100\% $
+\end{itemize}
+
+Sabiendo que la población será estable cuando $\lambda_d = 1$, se puede demostrar que esta condición se cumplirá cuando $f_0+s_0f_1+s_0s_1f_2+\dots+s_{k-2}f_{k-1} = 1$. La expresión $R = f_0+s_0f_1+s_0s_1f_2+\dots+s_{k-2}f_{k-1}$ se denomina tasa neta de reproducción y representa el número promedio de crías hembra que tiene una hembra durante su esperanza de vida. 
+
+\subsection{Modelización discreta de ecosistemas}
+
+Se puede describir un modelo biológico discreto que presenta una mayor complejidad, se trata del modelamiento discreto de ecosistemas, en el cual se analiza la interacción de entre las distintas poblaciones que conforman un ecosistema siendo que se conoce como afecta en promedio la presencia de una población en un periodo de tiempo a las otras poblaciones que residen en el ecosistema.
+
+De manera análoga a los demás modelos presentados, el numero de individuos de una población ($y_i$) en un periodo de tiempo $t+1$ estará determinado por el numero de individuos que existían de esa población y de otras en un tiempo $t$ por lo tanto el sistema puede ser representado usando el siguiente sistema de ecuaciones recursivas:
+
+\[
+	\begin{cases}
+	 y_{1}(t+1) = r_{11}y_{1} + r_{12}y_{2} + \dots + r_{1k}y_{k}\\
+	 y_{2}(t+1) = r_{21}y_{1} + r_{22}y_{2} + \dots + r_{2k}y_{k}\\
+	 \vdots\\
+	 y_{k}(t+1) = r_{k1}y_{1} + r_{k2}y_{2} + \dots + r_{kk}y_{k}\\
+	\end{cases}
+\]
+
+De donde obtenemos $\vec{Y}(t+1) = R\vec{Y}(t)$ con 
+$Y = \left[\begin{array}{c}
+    y_1\\
+    y_2\\
+    \vdots\\
+    y_k\\
+\end{array}\right]$ y
+$R = \left[\begin{array}{cccc}
+    r_{11} & r_{12} & \dots & r_{1k} \\
+    r_{21} & r_{12} & \dots & r_{2k} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    r_{k1} & r_{k2} & \dots & r_{kk} \\
+\end{array}\right]$
+
+Por lo tanto si se desea conocer la distribución entre las distintas poblaciones luego de $n$ periodos de tiempo desde un instante $t$ se tendrá que $\vec{Y}(t+n) = R\vec{Y}(t+n-1) = \dots = R^{n}\vec{Y}(t)$, de donde si se tiene que $R$ es diagonalizable el análisis del sistema se simplificara usando la matriz diagonal $D$ asociada a $R$ junto con la correspondiente matriz de paso $P$:
+\[
+    \vec{Y}(t+n) = R^{n}\vec{Y}(t) = PD^{n}P^{-1}(t)
+\]
+
+Si además de las interacciones entre especies existe algun otro factor que describa una variación cuantitativa de las poblaciones presentes en el ecosistema independientemente de el numero de individuos que existan en un sistema, se tendrá que:
+
+\[
+	\begin{cases}
+	 y_{1}(t+1) = r_{11}y_{1} + r_{12}y_{2} + \dots + r_{1k}y_{k} + f_1(t+1)\\
+	 y_{2}(t+1) = r_{21}y_{1} + r_{22}y_{2} + \dots + r_{2k}y_{k} + f_2(t+1)\\
+	 \vdots\\
+	 y_{k}(t+1) = r_{k1}y_{1} + r_{k2}y_{2} + \dots + r_{kk}y_{k} + f_k(t+1)\\
+	\end{cases}
+\]
+
+Lo que luego representamos como $\vec{Y}(t+1) = R\vec{Y}(t) + \vec{F}(t+1)$ con  
+$\vec{F} = \left[\begin{array}{c}
+    f_1(t+1)\\
+    f_2(t+1)\\
+    \vdots\\
+    f_k(t+1)\\
+\end{array}\right]$
